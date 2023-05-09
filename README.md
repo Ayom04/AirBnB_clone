@@ -24,7 +24,7 @@ cd AirBnB_clone
 ```
 ./console
 ``` 
-and enter command
+    and enter command
 * Run hbnb(non-interactively): 
 ```
 echo "<command>" | ./console.py
