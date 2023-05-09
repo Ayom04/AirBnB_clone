@@ -18,16 +18,16 @@ All these files are interpreted/compiled on Ubuntu 20.04 LTS using python3 (vers
 ```
 * Access AirBnb directory: 
 ```
-cd AirBnB_clone
+    cd AirBnB_clone
 ```
 * Run hbnb(interactively): 
 ```
-./console
+    ./console
 ``` 
-    and enter command
+and enter command
 * Run hbnb(non-interactively): 
 ```
-echo "<command>" | ./console.py
+    echo "<command>" | ./console.py
 ```
 
 ## File Descriptions
@@ -55,4 +55,15 @@ List of commands this console current supports:
 * `def new(self, obj)` - sets in __objects the obj with key <obj class name>.id
 * `def save(self)` - serializes __objects to the JSON file (path: __file_path)
 * `def reload(self)` -  deserializes the JSON file to __objects
+
+Classes inherited from Base Model:
+* [user.py](/models/user.py)
+* [state.py](/models/state.py)
+* [city.py](/models/city.py)
+* [amenity.py](/models/amenity.py)
+* [place.py](/models/place.py)
+* [review.py](/models/review.py)
+
+#### `/tests` directory contains all unit test cases for this project:
+[/test_models/test_base_model.py](/tests/test_models/test_base_model.py) - Contains the TestBaseModel and TestBaseModelDocs classes
 
