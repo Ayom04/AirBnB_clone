@@ -16,9 +16,19 @@ All these files are interpreted/compiled on Ubuntu 20.04 LTS using python3 (vers
 ```
     git clone "https://github.com/Ayom04/AirBnB_clone.git"
 ```
-* Access AirBnb directory: `cd AirBnB_clone`
-* Run hbnb(interactively): `./console` and enter command
-* Run hbnb(non-interactively): `echo "<command>" | ./console.py`
+* Access AirBnb directory: 
+```
+cd AirBnB_clone
+```
+* Run hbnb(interactively): 
+```
+./console
+``` 
+and enter command
+* Run hbnb(non-interactively): 
+```
+echo "<command>" | ./console.py
+```
 
 ## File Descriptions
 [console.py](console.py) - the console contains the entry point of the command interpreter. 
