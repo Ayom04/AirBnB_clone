@@ -38,7 +38,7 @@ class BaseModel:
         dict = {}
         dict.update(self.__dict__)
         dict.update({'__class__':
-                          (str(type(self)).split('.')[-1]).split('\'')[0]})
+                     (str(type(self)).split('.')[-1]).split('\'')[0]})
         dict['created_at'] = self.created_at.isoformat()
         dict['updated_at'] = self.updated_at.isoformat()
         return dict
