@@ -1,5 +1,5 @@
 #!/usr/bin/python3
-"""State module for HBnB project"""
+"""Amenity module for HBnB project"""
 
 
 from models import BaseModel
