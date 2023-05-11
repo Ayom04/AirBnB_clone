@@ -1,11 +1,11 @@
 #!/usr/bin/python3
-""" """
+""" Test case for Amenity.py"""
 from tests.test_models.test_base_model import test_basemodel
 from models.amenity import Amenity
 
 
 class test_amenity(test_basemodel):
-    """ test cases for amenity"""
+    """ class to test amenity model"""
     def __init__(self, *args, **kwargs):
         """ test initialization """
         super().__init__(*args, **kwargs)

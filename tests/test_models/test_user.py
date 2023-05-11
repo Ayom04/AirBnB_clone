@@ -1,11 +1,11 @@
 #!/usr/bin/python3
-""" """
+""" test case for user.py"""
 from tests.test_models.test_base_model import test_basemodel
 from models.user import User
 
 
 class test_user(test_basemodel):
-    """ """
+    """class testing the user model"""
     def __init__(self, *args, **kwargs):
         """ """
         super().__init__(*args, **kwargs)

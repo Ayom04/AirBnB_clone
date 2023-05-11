@@ -1,11 +1,11 @@
 #!/usr/bin/python3
-""" """
+""" test for place.py"""
 from tests.test_models.test_base_model import test_basemodel
 from models.place import Place
 
 
 class test_Place(test_basemodel):
-    """ """
+    """ class to test for place models """
 
     def __init__(self, *args, **kwargs):
         """test initialization """

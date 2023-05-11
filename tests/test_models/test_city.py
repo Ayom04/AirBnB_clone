@@ -1,11 +1,11 @@
 #!/usr/bin/python3
-""" """
+"""tests for city.py"""
 from tests.test_models.test_base_model import test_basemodel
 from models.city import City
 
 
 class test_City(test_basemodel):
-    """class to test for City"""
+    """class to test the City model"""
 
     def __init__(self, *args, **kwargs):
         """ """
