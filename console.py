@@ -15,24 +15,24 @@ import shlex
 
 
 def _key_value_parser(self, args):
-        new_dict = {}
-        for arg in args:
-            if "=" in arg:
-                keyValueParse = arg.split('=', 1)
-                key = keyValueParse[0]
-                value = keyValueParse[1]
-                if value[0] == value[-1] == '"':
-                    value = shlex.split(value)[0].replace('_', ' ')
-                else:
+    new_dict = {}
+    for arg in args:
+        if "=" in arg:
+            keyValueParse = arg.split('=', 1)
+            key = keyValueParse[0]
+            value = keyValueParse[1]
+            if value[0] == value[-1] == '"':
+                value = shlex.split(value)[0].replace('_', ' ')
+            else:
+                try:
+                    value = int(value)
+                except (ValueError):
                     try:
-                        value = int(value)
+                        value = float(value)
                     except (ValueError):
-                        try:
-                            value = float(value)
-                        except (ValueError):
-                            continue
-                new_dict[key] = value
-        return new_dict
+                        continue
+            new_dict[key] = value
+    return new_dict
 
 
 classes = {"Amenity": Amenity, "BaseModel": BaseModel, "City": City,
@@ -154,6 +154,23 @@ class HBNBCommand(cmd.Cmd):
                             print("** value missing **")
                     else:
                         print("** attribute name missing **")
+                else:
+                    print("** no instance found **")
+            else:
+                print("** instance id missing **")
+        else:
+            print("** class doesn't exist **")
+
+    def do_count(self, arg):
+        """Prints the number of instances of a class"""
+        args = shlex.split(arg)
+        if len(args) == 0:
+            print("** class name missing **")
+        elif args[0] in classes:
+            if len(args) > 1:
+                k = args[0] + "." + args[1]
+                if k in models.storage.all():
+                    print(str(len(models.storage.all()[k])))
                 else:
                     print("** no instance found **")
             else:
