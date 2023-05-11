@@ -2,7 +2,7 @@
 """Amenity module for HBnB project"""
 
 
-from models import BaseModel
+from models.base_model import BaseModel
 
 
 class Amenity(BaseModel):
