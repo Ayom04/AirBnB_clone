@@ -220,6 +220,81 @@ class HBNBCommand(cmd.Cmd):
         """ """
         print("Usage: count <class_name>")
 
+    def do_update(self, args):
+        """ Updates a certain object with new info """
+        class_name = class_id = _att_name = _att_val = kwargs = ''
+
+        args = args.partition(" ")
+        if args[0]:
+            class_name = args[0]
+        else:  # class name not present
+            print("** class name missing **")
+            return
+        if class_name not in HBNBCommand.classes:
+            print("** class doesn't exist **")
+            return
+
+        args = args[2].partition(" ")
+        if args[0]:
+            class_id = args[0]
+        else:
+            print("** instance id missing **")
+            return
+
+        key = class_name + "." + class_id
+
+        if key not in storage.all():
+            print("** no instance found **")
+            return
+
+        if '{' in args[2] and '}' in args[2] and type(eval(args[2])) is dict:
+            kwargs = eval(args[2])
+            args = []
+            for k, v in kwargs.items():
+                args.append(k)
+                args.append(v)
+        else:
+            args = args[2]
+            if args and args[0] is '\"':
+                second_quote = args.find('\"', 1)
+                _att_name = args[1:second_quote]
+                args = args[second_quote + 1:]
+
+            args = args.partition(' ')
+
+            if not _att_name and args[0] is not ' ':
+                _att_name = args[0]
+            if args[2] and args[2][0] is '\"':
+                _att_val = args[2][1:args[2].find('\"', 1)]
+
+            if not _att_val and args[2]:
+                _att_val = args[2].partition(' ')[0]
+
+            args = [_att_name, _att_val]
+
+        new_dict = storage.all()[key]
+
+        for i, _att_name in enumerate(args):
+            if (i % 2 == 0):
+                _att_val = args[i + 1]
+                if not _att_name:
+                    print("** attribute name missing **")
+                    return
+                if not _att_val:
+                    print("** value missing **")
+                    return
+                if _att_name in HBNBCommand.types:
+                    _att_val = HBNBCommand.types[_att_name](_att_val)
+
+                new_dict.__dict__.update({_att_name: _att_val})
+
+        new_dict.save()
+
+    def help_update(self):
+        """ Help information for the update class """
+        print("Updates an object with new information")
+        print("Usage: update <className> <id> <attName> <attVal>\n")
+
 
 if __name__ == "__main__":
     HBNBCommand().cmdloop()
