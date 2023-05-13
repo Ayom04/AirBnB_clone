@@ -12,32 +12,32 @@ The console is the first segment of the AirBnB project at ALX that will collecti
 All these files are interpreted/compiled on Ubuntu 20.04 LTS using python3 (version 3.8.5)
 
 ## Installation
-* Clone this repository: 
+* Clone this repository:
 ```
     git clone "https://github.com/Ayom04/AirBnB_clone.git"
 ```
-* Access AirBnb directory: 
+* Access AirBnb directory:
 ```
     cd AirBnB_clone
 ```
-* Run hbnb(interactively): 
+* Run hbnb(interactively):
 ```
     ./console
-``` 
+```
 and enter command
-* Run hbnb(non-interactively): 
+* Run hbnb(non-interactively):
 ```
     echo "<command>" | ./console.py
 ```
 
 ## File Descriptions
-[console.py](console.py) - the console contains the entry point of the command interpreter. 
+[console.py](console.py) - the console contains the entry point of the command interpreter.
 List of commands this console current supports:
 * `create` - Creates a new instance of`BaseModel`, saves it (to the JSON file) and prints the id
 * `show` - Prints the string representation of an instance based on the class name and id.
 * `destroy` - Deletes an instance based on the class name and id (save the change into the JSON file).
 * `all` - Prints all string representation of all instances based or not on the class name.
-* `update` - Updates an instance based on the class name and id by adding or updating attribute (save the change into the JSON file). 
+* `update` - Updates an instance based on the class name and id by adding or updating attribute (save the change into the JSON file).
 * `quit` - exits console
 * `EOF` - exits console
 * `<emptyline>` - shouldn’t execute anything
@@ -66,4 +66,3 @@ Classes inherited from Base Model:
 
 #### `/tests` directory contains all unit test cases for this project:
 [/test_models/test_base_model.py](/tests/test_models/test_base_model.py) - Contains the TestBaseModel and TestBaseModelDocs classes
-
