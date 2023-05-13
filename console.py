@@ -255,16 +255,16 @@ class HBNBCommand(cmd.Cmd):
                 args.append(v)
         else:
             args = args[2]
-            if args and args[0] is '\"':
+            if args and args[0] == '\"':
                 second_quote = args.find('\"', 1)
                 _att_name = args[1:second_quote]
                 args = args[second_quote + 1:]
 
             args = args.partition(' ')
 
-            if not _att_name and args[0] is not ' ':
+            if not _att_name and args[0] != ' ':
                 _att_name = args[0]
-            if args[2] and args[2][0] is '\"':
+            if args[2] and args[2][0] == '\"':
                 _att_val = args[2][1:args[2].find('\"', 1)]
 
             if not _att_val and args[2]:
