@@ -437,4 +437,98 @@ class TestConsoleDocs(unittest.TestCase):
                 all_dic = storage.all()
                 objst = str(all_dic[i + '.' + _id_st[:-1]])
                 self.assertEqual(_st[:-1], objst)
-        
+
+    class Test_all(unittest.TestCase):
+        """ Tests the all command """
+
+    def setUp(self):
+        """ Set up for all methods """
+        try:
+            remove("file.json")
+        except Exception:
+            pass
+        FileStorage._FileStorage__objects = {}
+
+    def tearDown(self):
+        """ Tear down for all methods """
+        try:
+            remove("file.json")
+        except Exception:
+            pass
+
+    def test_update_no_existent_class(self):
+        """  Test for all with no existent class """
+        msg = "** class doesn't exist **\n"
+        with patch('sys.stdout', new=io.StringIO()) as f:
+            HBNBCommand().onecmd("all MyModel")
+            _st = f.getvalue()
+            self.assertEqual(msg, _st)
+
+    def test_new_update_no_existent_class(self):
+        """  Test for all with no existent class """
+        msg = "** class doesn't exist **\n"
+        with patch('sys.stdout', new=io.StringIO()) as f:
+            pre_cmd = HBNBCommand().precmd("MyModel.all()")
+            HBNBCommand().onecmd(pre_cmd)
+            _st = f.getvalue()
+            if _st[0] == "\n":
+                msg = "\n" + msg
+            self.assertEqual(msg, _st)
+
+    def test_empty(self):
+        """ Tests for empty storage """
+        classes = ["BaseModel", "User", "State", "City",
+                   "Amenity", "Place", "Review"]
+        msg = "[]\n"
+        with patch('sys.stdout', new=io.StringIO()) as f:
+            HBNBCommand().onecmd("all")
+            _st = f.getvalue()
+            self.assertEqual(msg, _st)
+        for i in classes:
+            with patch('sys.stdout', new=io.StringIO()) as f:
+                HBNBCommand().onecmd("all " + i)
+                _st = f.getvalue()
+                self.assertEqual(msg, _st)
+
+    def test_new_empty(self):
+        """ Tests for empty storage """
+        classes = ["BaseModel", "User", "State", "City",
+                   "Amenity", "Place", "Review"]
+        msg = "[]\n"
+        with patch('sys.stdout', new=io.StringIO()) as f:
+            HBNBCommand().onecmd("all()")
+            _st = f.getvalue()
+            self.assertEqual(msg, _st)
+        for i in classes:
+            with patch('sys.stdout', new=io.StringIO()) as f:
+                pre_cmd = HBNBCommand().precmd(i + ".all()")
+                HBNBCommand().onecmd(pre_cmd)
+                _st = f.getvalue()
+                if _st[0] == "\n":
+                    msg = "\n" + msg
+                self.assertEqual(msg, _st)
+
+    def test_all_classes(self):
+        """ Tests All command for classes_double """
+        classes = ["BaseModel", "User", "State", "City",
+                   "Amenity", "Place", "Review"]
+        classes += classes
+        for i in classes:
+            with patch('sys.stdout', new=io.StringIO()) as f:
+                HBNBCommand().onecmd("create " + i)
+                _st = f.getvalue()
+            alldic = storage.all()
+            all_cl = []
+            all_full = []
+            for j in alldic.keys():
+                all_full.append(str(alldic[j]))
+                if i in j:
+                    all_cl.append(str(alldic[j]))
+            with patch('sys.stdout', new=io.StringIO()) as f:
+                HBNBCommand().onecmd("all " + i)
+                _st = f.getvalue()
+                self.assertEqual(str(all_cl) + "\n", _st)
+            with patch('sys.stdout', new=io.StringIO()) as f:
+                HBNBCommand().onecmd("all")
+                _st = f.getvalue()
+                self.assertEqual(str(all_full) + "\n", _st)
