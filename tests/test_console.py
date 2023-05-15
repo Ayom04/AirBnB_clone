@@ -550,3 +550,41 @@ class TestConsoleDocs(unittest.TestCase):
             remove("file.json")
         except Exception:
             pass
+
+    def test_update_no_class(self):
+        """  Test for update with no class """
+        msg = "** class name missing **\n"
+        with patch('sys.stdout', new=io.StringIO()) as f:
+            HBNBCommand().onecmd("update")
+            _st = f.getvalue()
+            self.assertEqual(msg, _st)
+
+    def test_update_no_existent_class(self):
+        """  Test for update with no existent class """
+        msg = "** class doesn't exist **\n"
+        with patch('sys.stdout', new=io.StringIO()) as f:
+            HBNBCommand().onecmd("update MyModel")
+            _st = f.getvalue()
+            self.assertEqual(msg, _st)
+
+    def test_new_update_no_existent_class(self):
+        """  Test for update with no existent class """
+        msg = "** class doesn't exist **\n"
+        with patch('sys.stdout', new=io.StringIO()) as f:
+            pre_cmd = HBNBCommand().precmd("MyModel.update()")
+            HBNBCommand().onecmd(pre_cmd)
+            _st = f.getvalue()
+            if st[0] == "\n":
+                msg = "\n" + msg
+            self.assertEqual(msg, _st)
+
+    def test_update_no_id(self):
+        """  Test for update with id missing """
+        msg = "** instance id missing **\n"
+        classes = ["BaseModel", "User", "State", "City",
+                   "Amenity", "Place", "Review"]
+        for i in classes:
+            with patch('sys.stdout', new=io.StringIO()) as f:
+                HBNBCommand().onecmd("update " + i)
+                _st = f.getvalue()
+                self.assertEqual(msg, _st)
