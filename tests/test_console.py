@@ -532,3 +532,21 @@ class TestConsoleDocs(unittest.TestCase):
                 HBNBCommand().onecmd("all")
                 _st = f.getvalue()
                 self.assertEqual(str(all_full) + "\n", _st)
+
+    class Test_update(unittest.TestCase):
+        """ Tests the update commands """
+
+    def setUp(self):
+        """ Set up for all methods """
+        try:
+            remove("file.json")
+        except Exception:
+            pass
+        FileStorage._FileStorage__objects = {}
+
+    def tearDown(self):
+        """ Tear down for all methods """
+        try:
+            remove("file.json")
+        except Exception:
+            pass
