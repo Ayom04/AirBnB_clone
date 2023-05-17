@@ -1,194 +1,106 @@
 #!/usr/bin/python3
-""" Test case for Amenity.py"""
-from tests.test_models.test_base_model import test_basemodel
-from models.amenity import Amenity
+"""
+Contains the TestAmenityDocs classes
+"""
+
+from datetime import datetime
+import inspect
+import models
+from models import amenity
+from models.base_model import BaseModel
+import pep8
+import unittest
+Amenity = amenity.Amenity
 
 
-class test_amenity(test_basemodel):
-    """ class to test amenity model"""
-    def __init__(self, *args, **kwargs):
-        """ test initialization """
-        super().__init__(*args, **kwargs)
-        self.name = "Amenity"
-        self.value = Amenity
+class TestAmenityDocs(unittest.TestCase):
+    """Tests to check the documentation and style of Amenity class"""
+    @classmethod
+    def setUpClass(cls):
+        """Set up for the doc tests"""
+        cls.amenity_f = inspect.getmembers(Amenity, inspect.isfunction)
 
-    def test_amenity_create(self):
-        """test case for amenity create"""
+    def test_pep8_conformance_amenity(self):
+        """Test that models/amenity.py conforms to PEP8."""
+        pep8s = pep8.StyleGuide(quiet=True)
+        result = pep8s.check_files(['models/amenity.py'])
+        self.assertEqual(result.total_errors, 0,
+                         "Found code style errors (and warnings).")
+
+    def test_pep8_conformance_test_amenity(self):
+        """Test that tests/test_models/test_amenity.py conforms to PEP8."""
+        pep8s = pep8.StyleGuide(quiet=True)
+        result = pep8s.check_files(['tests/test_models/test_amenity.py'])
+        self.assertEqual(result.total_errors, 0,
+                         "Found code style errors (and warnings).")
+
+    def test_amenity_module_docstring(self):
+        """Test for the amenity.py module docstring"""
+        self.assertIsNot(amenity.__doc__, None,
+                         "amenity.py needs a docstring")
+        self.assertTrue(len(amenity.__doc__) >= 1,
+                        "amenity.py needs a docstring")
+
+    def test_amenity_class_docstring(self):
+        """Test for the Amenity class docstring"""
+        self.assertIsNot(Amenity.__doc__, None,
+                         "Amenity class needs a docstring")
+        self.assertTrue(len(Amenity.__doc__) >= 1,
+                        "Amenity class needs a docstring")
+
+    def test_amenity_func_docstrings(self):
+        """Test for the presence of docstrings in Amenity methods"""
+        for func in self.amenity_f:
+            self.assertIsNot(func[1].__doc__, None,
+                             "{:s} method needs a docstring".format(func[0]))
+            self.assertTrue(len(func[1].__doc__) >= 1,
+                            "{:s} method needs a docstring".format(func[0]))
+
+
+class TestAmenity(unittest.TestCase):
+    """Test the Amenity class"""
+    def test_is_subclass(self):
+        """Test that Amenity is a subclass of BaseModel"""
         amenity = Amenity()
-        amenity.name = "Test Amenity"
-        amenity.save()
-        self.assertEqual(amenity.name, "Test Amenity")
-        amenity.delete()
+        self.assertIsInstance(amenity, BaseModel)
+        self.assertTrue(hasattr(amenity, "id"))
+        self.assertTrue(hasattr(amenity, "created_at"))
+        self.assertTrue(hasattr(amenity, "updated_at"))
 
-    def test_amenity_update(self):
-        """test case for amenity update"""
+    def test_name_attr(self):
+        """Test that Amenity has attribute name, and it's as an empty string"""
         amenity = Amenity()
-        amenity.name = "Test Amenity"
-        amenity.save()
-        amenity.name = "Test Amenity Updated"
-        amenity.save()
-        self.assertEqual(amenity.name, "Test Amenity Updated")
-        amenity.delete()
+        self.assertTrue(hasattr(amenity, "name"))
+        if models.storage_t == 'db':
+            self.assertEqual(amenity.name, None)
+        else:
+            self.assertEqual(amenity.name, "")
 
-    def test_amenity_delete(self):
-        """ test case for amenity delete"""
-        amenity = Amenity()
-        amenity.name = "Test Amenity"
-        amenity.save()
-        amenity.delete()
-        self.assertEqual(len(Amenity.objects.all()), 0)
-        amenity.delete()
+    def test_to_dict_creates_dict(self):
+        """test to_dict method creates a dictionary with proper attrs"""
+        am = Amenity()
+        # print(am.__dict__)
+        new_d = am.to_dict()
+        self.assertEqual(type(new_d), dict)
+        self.assertFalse("_sa_instance_state" in new_d)
+        for attr in am.__dict__:
+            if attr is not "_sa_instance_state":
+                self.assertTrue(attr in new_d)
+        self.assertTrue("__class__" in new_d)
 
-    def test_amenity_list(self):
-        """ test cases when a list is passed in"""
-        amenity = Amenity()
-        amenity.name = "Test Amenity"
-        amenity.save()
-        amenity2 = Amenity()
-        amenity2.name = "Test Amenity2"
-        amenity2.save()
-        self.assertEqual(len(Amenity.objects.all()), 2)
-        self.assertEqual(Amenity.objects.all()[0].name, "Test Amenity")
-        self.assertEqual(Amenity.objects.all()[1].name, "Test Amenity2")
-        amenity.delete()
-        amenity2.delete()
+    def test_to_dict_values(self):
+        """test that values in dict returned from to_dict are correct"""
+        t_format = "%Y-%m-%dT%H:%M:%S.%f"
+        am = Amenity()
+        new_d = am.to_dict()
+        self.assertEqual(new_d["__class__"], "Amenity")
+        self.assertEqual(type(new_d["created_at"]), str)
+        self.assertEqual(type(new_d["updated_at"]), str)
+        self.assertEqual(new_d["created_at"], am.created_at.strftime(t_format))
+        self.assertEqual(new_d["updated_at"], am.updated_at.strftime(t_format))
 
-    def test_amenity_get(self):
-        """ test cases for get"""
+    def test_str(self):
+        """test that the str method has the correct output"""
         amenity = Amenity()
-        amenity.name = "Test Amenity"
-        amenity.save()
-        amenity2 = Amenity()
-        amenity2.name = "Test Amenity2"
-        amenity2.save()
-        self.assertEqual(Amenity.objects.all()[0].name, "Test Amenity")
-        self.assertEqual(Amenity.objects.all()[1].name, "Test Amenity2")
-        self.assertEqual(Amenity.objects.get(name="Test Amenity").name,
-                         "Test Amenity")
-        self.assertEqual(Amenity.objects.get(name="Test Amenity2").name,
-                         "Test Amenity2")
-        amenity.delete()
-        amenity2.delete()
-
-    def test_amenity_create(self):
-        """test case for amenity create"""
-        amenity = Amenity()
-        amenity.name = "Test Amenity"
-        amenity.save()
-        self.assertEqual(amenity.name, "Test Amenity")
-        amenity.delete()
-
-    def test_amenity_update(self):
-        """test case for amenity update"""
-        amenity = Amenity()
-        amenity.name = "Test Amenity"
-        amenity.save()
-        amenity.name = "Test Amenity Updated"
-        amenity.save()
-        self.assertEqual(amenity.name, "Test Amenity Updated")
-        amenity.delete()
-
-    def test_amenity_delete(self):
-        """ test case for amenity delete"""
-        amenity = Amenity()
-        amenity.name = "Test Amenity"
-        amenity.save()
-        amenity.delete()
-        self.assertEqual(len(Amenity.objects.all()), 0)
-        amenity.delete()
-
-    def test_amenity_name(self):
-        """ test case for amenity name"""
-        amenity = Amenity()
-        amenity.name = "Test Amenity"
-        amenity.save()
-        self.assertEqual(amenity.name, "Test Amenity")
-        amenity.delete()
-
-    def test_amenity_value(self):
-        """ test case for amenity value"""
-        amenity = Amenity()
-        amenity.name = "Test Amenity"
-        amenity.save()
-        self.assertEqual(amenity.value, Amenity)
-        amenity.delete()
-
-    def test_amenity_name_string(self):
-        """ test case for amenity name string"""
-        amenity = Amenity()
-        amenity.name = "Test Amenity"
-        amenity.save()
-        self.assertEqual(amenity.name, "Test Amenity")
-        amenity.delete()
-
-    def test_amenity_value_string(self):
-        """ test case for amenity value string"""
-        amenity = Amenity()
-        amenity.name = "Test Amenity"
-        amenity.save()
-        self.assertEqual(amenity.value, Amenity)
-        amenity.delete()
-
-    def test_amenity_name_dict(self):
-        """ test case for amenity name dict"""
-        amenity = Amenity()
-        amenity.name = "Test Amenity"
-        amenity.save()
-        self.assertEqual(amenity.name, "Test Amenity")
-        amenity.delete()
-
-    def test_amenity_value_dict(self):
-        """ test case for amenity value dict"""
-        amenity = Amenity()
-        amenity.name = "Test Amenity"
-        amenity.save()
-        self.assertEqual(amenity.value, Amenity)
-        amenity.delete()
-
-    def test_amenity_name_list(self):
-        """ test case for amenity name list"""
-        amenity = Amenity()
-        amenity.name = "Test Amenity"
-        amenity.save()
-        self.assertEqual(amenity.name, "Test Amenity")
-        amenity.delete()
-
-    def test_amenity_value_list(self):
-        """ test case for amenity value list"""
-        amenity = Amenity()
-        amenity.name = "Test Amenity"
-        amenity.save()
-        self.assertEqual(amenity.value, Amenity)
-        amenity.delete()
-
-    def test_amenity_name_none(self):
-        """ test case for amenity name none"""
-        amenity = Amenity()
-        amenity.name = "Test Amenity"
-        amenity.save()
-        self.assertEqual(amenity.name, "Test Amenity")
-        amenity.delete()
-
-    def test_amenity_value_none(self):
-        """ test case for amenity value none"""
-        amenity = Amenity()
-        amenity.name = "Test Amenity"
-        amenity.save()
-        self.assertEqual(amenity.value, Amenity)
-        amenity.delete()
-
-    def test_amenity_name_empty(self):
-        """ test case for amenity name empty"""
-        amenity = Amenity()
-        amenity.name = "Test Amenity"
-        amenity.save()
-        self.assertEqual(amenity.name, "Test Amenity")
-        amenity.delete()
-
-    def test_amenity_value_empty(self):
-        """ test case for amenity value empty"""
-        amenity = Amenity()
-        amenity.name = "Test Amenity"
-        amenity.save()
-        self.assertEqual(amenity.value, Amenity)
-        amenity.delete()
+        string = "[Amenity] ({}) {}".format(amenity.id, amenity.__dict__)
+        self.assertEqual(string, str(amenity))
