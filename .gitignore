@@ -1,0 +1,8 @@
+*.pyc
+__pycache__
+hello.py
+TEST.PY
+/web_static/w3c_validator.py
+/nvenv
+/.venv
+.vscode
